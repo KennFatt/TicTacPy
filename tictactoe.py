@@ -22,8 +22,8 @@ class TicTacToe(object):
     ]
 
     def __init__(self, debugMode=False):
-        self.__log("Initializing the TicTacToe class...")
         self.__isDebugMode = debugMode
+        self.__log("Initializing the TicTacToe class...")
 
         self.__log("Allocating new spaces for board and player moves...")
         # Initialize the board with empty value.
