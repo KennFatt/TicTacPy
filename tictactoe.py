@@ -1,4 +1,6 @@
 import random
+import sys
+import time
 
 class TicTacToe(object):
 
@@ -19,10 +21,11 @@ class TicTacToe(object):
         [2, 4, 6]
     ]
 
-    def __init__(self, debugMode = False):
-        print("Initialize the game...")
+    def __init__(self, debugMode=False):
+        self.__log("Initializing the TicTacToe class...")
         self.__isDebugMode = debugMode
 
+        self.__log("Allocating new spaces for board and player moves...")
         # Initialize the board with empty value.
         # Board size: 3x3
         self.board = [[None] for i in range(0, 9)]
@@ -32,15 +35,7 @@ class TicTacToe(object):
         # Records the moves of player o.
         self.__oMoves = []
 
-        # Random fill:
-        if self.isDebugMode:
-            for i in self.board:
-                val = random.randint(0, 1)
-                if val == 0:
-                    i[0] = TicTacToe.CHARACTER_X_SYMBOL
-                else:
-                    i[0] = TicTacToe.CHARACTER_O_SYMBOL
-        print("Game is now initialized!")
+        self.__log("Game is now ready to use!")
 
     def getBoardCross(self, cr: int) -> list:
         """Get board's cross value in a list. It only has two valid value for `cr` wich is `1` and `2`.
@@ -59,6 +54,8 @@ class TicTacToe(object):
         Returns:
             list -- The value of cross side.
         """
+        self.__log("getBoardCross(cr: %d)" % cr)
+
         if (cr != 1) or (cr != 2):
             raise RuntimeError("Invalid cross side was given: %d" % cr)
 
@@ -79,6 +76,8 @@ class TicTacToe(object):
         Returns:
             list -- The value of column.
         """
+        self.__log("getBoardColumn(col: %d)" % col)
+
         if (col < 1) or (col > 3):
             raise RuntimeError("Invalid column index was given: %d" % d)
 
@@ -101,6 +100,8 @@ class TicTacToe(object):
         Returns:
             list -- The value of row.
         """
+        self.__log("getBoardRow(row: %d)" % row)
+
         if (row < 1) or (row > 3):
             raise RuntimeError("Invalid row index was given: %d" % row)
 
@@ -121,6 +122,8 @@ class TicTacToe(object):
         Raises:
             RuntimeError
         """
+        self.__log("insertCellValue(index: %d, character: %s)" % (index, character))
+
         if (index < 0) or (index > 8):
             raise RuntimeError("Given index exceed the limits: %d" % index)
 
@@ -142,6 +145,8 @@ class TicTacToe(object):
         Raises:
             RuntimeError
         """
+        self.__log("saveMovesRecord(character: %s, index: %d)" % (character, index))
+
         if (character != TicTacToe.CHARACTER_X_SYMBOL) and (character != TicTacToe.CHARACTER_O_SYMBOL):
             raise RuntimeError("Given value is not a valid character: %c" % character)
 
@@ -160,7 +165,17 @@ class TicTacToe(object):
         Returns:
             bool -- True if there is matches move from the data set (Found the winner).
         """
+        self.__log("checkMoves(records: 0x%x, dataSet: 0x%x)" % (id(records), id(dataSet)))
+
         def isContain(item) -> bool:
+            """Checking the `records` list that it contains `item` or it does not.
+            
+            Arguments:
+                item {any} -- Element with same value and type.
+            
+            Returns:
+                bool
+            """
             for x in records:
                 if x == item:
                     return True
@@ -170,6 +185,18 @@ class TicTacToe(object):
             if not isContain(item):
                 return False
         return True
+
+    def __log(self, message: str) -> None:
+        """Log any important message. Enable `debugMode` to activate this function.
+        
+        Arguments:
+            message {str} -- Log messages.
+        """
+        if not self.__isDebugMode:
+            return
+
+        now = time.localtime(time.time())
+        sys.stdout.write("[TicTacToe] %d:%d:%d -> %s\n" % (now.tm_hour, now.tm_min, now.tm_sec, message))
 
     @property
     def isDebugMode(self) -> bool:

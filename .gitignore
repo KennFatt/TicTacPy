@@ -2,6 +2,8 @@
 board.py
 contain.py
 first_eval.py
+logger.py
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
