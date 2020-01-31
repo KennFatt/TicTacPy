@@ -35,7 +35,51 @@ class TicTacToe(object):
         # Records the moves of player o.
         self.__oMoves = []
 
+        # Winner
+        self.__winner = ""
+
         self.__log("Game is now ready to use!")
+
+    def isCellTaken(self, index: int) -> bool:
+        """Checking the cell availability.
+        
+        Arguments:
+            index {int} -- Cell's index.
+        
+        Returns:
+            bool
+        """
+        return self.board[index][0] != None
+    
+    def getWinner(self) -> str:
+        """Get the winner.
+        
+        Returns:
+            str -- The winner's character.
+        """
+        return self.__winner
+
+    def setWinner(self, character: str) -> None:
+        """Set a new winner.
+        
+        Arguments:
+            character {str} -- The winner's character.
+        """
+        self.__winner = character
+
+    def getPlayerMovesRecord(self, character: str) -> list:
+        """[summary]
+        
+        Arguments:
+            character {str} -- [description]
+        
+        Returns:
+            list -- [description]
+        """
+        if character == TicTacToe.CHARACTER_X_SYMBOL:
+            return self.__xMoves
+        else:
+            return self.__oMoves
 
     def getBoardCross(self, cr: int) -> list:
         """Get board's cross value in a list. It only has two valid value for `cr` wich is `1` and `2`.
@@ -133,14 +177,14 @@ class TicTacToe(object):
         if self.board[index][0] != None:
             raise RuntimeError("The index is already filled with value: %c" % self.board[index][0])
 
-        self.board.insert(index, character)
+        self.board[index][0] = character
     
-    def saveMovesRecord(self, character: str, index: int) -> None:
+    def saveMovesRecord(self, index: int, character: str) -> None:
         """Save each moves record into a list. The record would be used to get the winner.
         
         Arguments:
-            character {str} -- Character type.
             index {int} -- Destination cell's index.
+            character {str} -- Character type.
         
         Raises:
             RuntimeError
@@ -155,36 +199,21 @@ class TicTacToe(object):
         else:
             self.__oMoves.append(index)
 
-    def checkMoves(self, records: list, dataSet: list) -> bool:
+    def checkMoves(self, records: list) -> bool:
         """Check player moves from the given `records`.
         
         Arguments:
             records {list} -- Player's move records.
-            dataSet {list} -- All the probability of winner moves.
         
         Returns:
             bool -- True if there is matches move from the data set (Found the winner).
         """
-        self.__log("checkMoves(records: 0x%x, dataSet: 0x%x)" % (id(records), id(dataSet)))
-
-        def isContain(item) -> bool:
-            """Checking the `records` list that it contains `item` or it does not.
-            
-            Arguments:
-                item {any} -- Element with same value and type.
-            
-            Returns:
-                bool
-            """
-            for x in records:
-                if x == item:
-                    return True
-            return False
-
-        for item in dataSet:
-            if not isContain(item):
-                return False
-        return True
+        self.__log("checkMoves(records: 0x%x)" % id(records))
+        
+        for data in TicTacToe.DATA_SET:
+            if all(element in records for element in data):
+                return True
+        return False
 
     def __log(self, message: str) -> None:
         """Log any important message. Enable `debugMode` to activate this function.

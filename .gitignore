@@ -3,6 +3,8 @@ board.py
 contain.py
 first_eval.py
 logger.py
+map.py
+reader.py
 .vscode/
 
 # Byte-compiled / optimized / DLL files
