@@ -230,3 +230,7 @@ class TicTacToe(object):
     @property
     def isDebugMode(self) -> bool:
         return self.__isDebugMode
+
+if __name__ == "__main__":
+    print("[Error] This module is the backend class. Please use `play.py` instead to start the game!")
+    exit(code=1)
